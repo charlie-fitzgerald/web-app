@@ -25,7 +25,7 @@ def login():
         else:
             flash('Email does not exist.', category='error')
 
-    return render_template("login.html")
+    return render_template("login.html", user=current_user)
 
 @auth.route('/logout')
 @login_required
@@ -47,13 +47,13 @@ def sign_up():
         if user:
             flash('Email already exists.', category='error')
         elif len(email) < 4:
-            flash("Email more than 4", category="error")
+            flash("Email must be at least 4 characters", category="error")
         elif len(first_name) < 2:
-            flash("First more than 2", category="error")
+            flash("First name must be at least 2 characters", category="error")
         elif password1 != password2:
-            flash("password must match", category="error")
+            flash("Passwords must match", category="error")
         elif len(password1) < 7:
-            flash("password more than 7", category="error")
+            flash("Passwords need to be at least 7 characters", category="error")
         else:
             # add user to database
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1, method='scrypt'))
@@ -64,4 +64,4 @@ def sign_up():
             return redirect(url_for('views.home'))
 
 
-    return render_template("sign_up.html")
+    return render_template("sign_up.html", user=current_user)
